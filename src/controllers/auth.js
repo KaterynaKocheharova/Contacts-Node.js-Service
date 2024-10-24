@@ -22,11 +22,7 @@ export const registerUserController = async (req, res) => {
 
   const createdUser = await registerUser(userData);
 
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully registered user!',
-    data: createdUser,
-  });
+  res.status(201).json({ createdUser });
 };
 
 // ======================================= LOGIN
@@ -42,11 +38,7 @@ export const loginUserController = async (req, res) => {
   setupCookies(res, session);
 
   res.status(200).json({
-    status: 200,
-    message: 'Successfully logged in the user!',
-    data: {
-      accessToken: session.accessToken,
-    },
+    accessToken: session.accessToken,
   });
 };
 
@@ -61,11 +53,7 @@ export const refreshUserSessionController = async (req, res) => {
   setupCookies(res, session);
 
   res.status(200).json({
-    status: 200,
-    message: 'Successfully refreshed the session',
-    data: {
-      accessToken: session.accessToken,
-    },
+    accessToken: session.accessToken,
   });
 };
 
@@ -89,7 +77,6 @@ export const requestResetEmailController = async (req, res) => {
   const { email } = req.body;
   await requestResetEmail(email);
   res.status(200).json({
-    status: 200,
     message: 'Reset password email has been successfully sent.',
   });
 };
@@ -99,7 +86,6 @@ export const requestResetEmailController = async (req, res) => {
 export const resetPasswordController = async (req, res) => {
   await resetPassword({ password: req.body.password, token: req.body.token });
   res.status(200).json({
-    status: 200,
     message: 'Password has been successfully reset.',
   });
 };
@@ -110,11 +96,8 @@ export const getGoogleOAuthUrlController = (req, res) => {
   const url = generateAuthUrl();
 
   res.status(200).json({
-    status: 200,
     message: 'Successfully got Google OAuth url',
-    data: {
-      url,
-    },
+    url,
   });
 };
 
@@ -125,10 +108,6 @@ export const loginOrSignupWithGoogleController = async (req, res) => {
   setupCookies(res, session);
 
   res.status(200).json({
-    status: 200,
-    message: 'Successfully logged in via Google OAuth!',
-    data: {
-      accessToken: session.accessToken,
-    },
+    accessToken: session.accessToken,
   });
 };
