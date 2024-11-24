@@ -20,9 +20,15 @@ export const registerUserController = async (req, res) => {
     password,
   };
 
-  const createdUser = await registerUser(userData);
+  const session = await registerUser(userData);
 
-  res.status(201).json({ createdUser });
+  setupCookies(res, session);
+
+  res.status(201).json({
+    name,
+    email,
+    accessToken: session.accessToken,
+  });
 };
 
 // ======================================= LOGIN
@@ -35,9 +41,11 @@ export const loginUserController = async (req, res) => {
   };
   const session = await loginUser(userData);
 
-  setupCookies(res, session);
+  setupCookies(res, session.session);
 
   res.status(200).json({
+    email,
+    name: session.name,
     accessToken: session.accessToken,
   });
 };

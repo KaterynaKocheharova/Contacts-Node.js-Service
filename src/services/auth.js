@@ -30,7 +30,12 @@ export const registerUser = async (userData) => {
     throw createHttpError(409, 'Email in use');
   }
   const encryptedPassword = await bcrypt.hash(userData.password, 10);
-  return User.create({ ...userData, password: encryptedPassword });
+  const newUser = await User.create({
+    ...userData,
+    password: encryptedPassword,
+  });
+  const newSession = createSession(newUser._id);
+  return await Session.create(newSession);
 };
 
 // ========================================= LOGIN
@@ -55,7 +60,11 @@ export const loginUser = async (userData) => {
   });
 
   const newSession = createSession(user._id);
-  return await Session.create(newSession);
+  const session = await Session.create(newSession);
+  return {
+    session,
+    name: user.name,
+  };
 };
 
 // =================================== REFRESH
